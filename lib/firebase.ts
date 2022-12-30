@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { collection, DocumentData, DocumentSnapshot, getDocs, getFirestore, query, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 // Your web app's Firebase configuration
@@ -21,3 +21,20 @@ export const auth = getAuth(app)
 export const googleAuthProvider = new GoogleAuthProvider()
 export const firestore = getFirestore(app)
 export const storage = getStorage(app)
+
+export async function getUserWithUsername(username): Promise<DocumentData> {
+  const usersRef = collection(firestore, "users")
+  const userQuery = query(usersRef, where('username', '==', username))
+  const userDoc = (await getDocs(userQuery)).docs[0]
+  return userDoc
+}
+
+export function postToJSON(doc: DocumentSnapshot) {
+  const data = doc.data()
+
+  return {
+    ...data,
+    createdAt: data.createdAt.toMillis(),
+    updatedAt: data.updatedAt.toMillis()
+  }
+}

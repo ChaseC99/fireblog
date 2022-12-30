@@ -13,9 +13,7 @@ export function useProfile() {
         if (user) {
             unsubscribe = onSnapshot(doc(firestore, 'users', user.uid), doc => {
                 const result = doc.data()
-                console.log(result)
-                setUsername(result)
-
+                setUsername(result.username)
             })
         } else {
             setUsername(null)
