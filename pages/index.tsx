@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Loader from '../components/Loader'
+import Metatags from '../components/Metatags'
 import PostFeed from '../components/PostFeed'
 import { getRecentPosts } from '../lib/firebase'
 
@@ -33,6 +34,7 @@ export default function Home(props) {
 
   return (
     <main>
+      <Metatags title={'FireBlog'} />
       <PostFeed posts={posts} />
 
       {!loading && !postsEnd && <button onClick={getMorePosts}>Load more</button>}

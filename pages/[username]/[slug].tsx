@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import Metatags from "../../components/Metatags";
 import { getAllPosts, getPostBySlug, getUserWithUsername } from "../../lib/firebase"
 
 export async function getStaticProps({ params }) {
@@ -40,6 +41,7 @@ export default function PostPage(props) {
 
     return (
         <main>
+            <Metatags title={post.title} />
             <div className="card">
                 <h1>{post.title}</h1>
                 <span className="text-sm">

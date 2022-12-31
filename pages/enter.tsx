@@ -4,6 +4,7 @@ import { useCallback, useContext, useEffect, useState } from "react"
 import { UserContext } from "../lib/context"
 import { auth, firestore, googleAuthProvider } from "../lib/firebase"
 import debounce from 'lodash.debounce';
+import Metatags from "../components/Metatags"
 
 
 export default function EnterPage({}) {
@@ -11,6 +12,7 @@ export default function EnterPage({}) {
     
     return (
         <main>
+            <Metatags title={'FireBlog Signup'} />
             {user ?
                 !username ? <UsernameForm /> : <SignOutButton />
                 :
