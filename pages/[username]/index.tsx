@@ -9,7 +9,6 @@ export async function getServerSideProps({ query: q }){
 
     if (user) {
         posts = await getUserPosts(user.username)
-        console.log('POSTS', posts)
     }
 
     return {

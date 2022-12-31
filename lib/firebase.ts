@@ -32,7 +32,6 @@ export async function getUserWithUsername(username): Promise<DocumentData> {
 }
 
 export async function getUserPosts(username) {
-  console.log(username)
   const postsQuery = query(
     collectionGroup(firestore, 'posts'),
     where('username', '==', username),
@@ -52,7 +51,6 @@ export async function getRecentPosts(postsLimit: number, startAt?: string) {
 
   if (startAt) {
     const cursor = typeof startAt === 'number' ? Timestamp.fromMillis(startAt) : startAt
-    console.log('cursor', cursor, typeof cursor)
     filters.push(startAfter(cursor))
   }
 
