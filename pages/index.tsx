@@ -1,21 +1,12 @@
-import { collectionGroup, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore'
 import { useState } from 'react'
 import Loader from '../components/Loader'
 import PostFeed from '../components/PostFeed'
-import { firestore, postToJSON } from '../lib/firebase'
+import { getRecentPosts } from '../lib/firebase'
 
 const LIMIT = 1
 
 export async function getServerSideProps() {
-  const postsRef = collectionGroup(firestore, 'posts')
-  const postsQuery = query(
-    postsRef, 
-    where('published', '==', true),
-    orderBy('createdAt', 'desc'),
-    limit(LIMIT)
-  )
-
-  const posts = (await getDocs(postsQuery)).docs.map(post => postToJSON(post))
+  const posts = await getRecentPosts(LIMIT)
 
   return {
     props: {posts}
@@ -29,26 +20,15 @@ export default function Home(props) {
 
   const getMorePosts = async () => {
     setLoading(true)
-
-    const last = posts[posts.length-1]
-    const cursor = last.createdAt // typeof last.createdAt === 'number' ? fromMi (last.createdAt) : last.createdAt
-
-    const postsRef = collectionGroup(firestore, 'posts')
-    const postsQuery = query(
-      postsRef, 
-      where('published', '==', true),
-      orderBy('createdAt', 'desc'),
-      startAfter(cursor),
-      limit(LIMIT)
-    )
-
-    const newPosts = (await getDocs(postsQuery)).docs.map(post => postToJSON(post))
+ 
+    const cursor = posts[posts.length-1].createdAt
+    const newPosts = await getRecentPosts(LIMIT, cursor)
+    
     setPosts(posts.concat(newPosts))
-    setLoading(false)
-
     if (newPosts.length < LIMIT) {
       setPostsEnd(true)
     }
+    setLoading(false)
   }
 
   return (
