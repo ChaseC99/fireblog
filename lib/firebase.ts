@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { collection, collectionGroup, DocumentData, DocumentSnapshot, getDocs, getFirestore, limit, orderBy, query, QueryConstraint, startAfter, Timestamp, where } from 'firebase/firestore'
+import { collection, collectionGroup, doc, DocumentData, DocumentSnapshot, getDoc, getDocs, getFirestore, limit, orderBy, query, QueryConstraint, startAfter, Timestamp, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 // Your web app's Firebase configuration
@@ -40,6 +40,22 @@ export async function getUserPosts(username) {
     limit(5)
   )
   return (await getDocs(postsQuery)).docs.map(post => postToJSON(post))
+}
+
+export async function getPostBySlug(username, slug) {
+  const postsQuery = query(
+    collectionGroup(firestore, 'posts'),
+    where('username', '==', username),
+    where('slug', '==', slug)
+  )
+  const docs = await getDocs(postsQuery)
+  const post = docs.docs[0]
+  return post ? postToJSON(post) : null
+}
+
+export async function getAllPosts() {
+  const posts = await getDocs(collectionGroup(firestore, 'posts'))
+  return posts.docs
 }
 
 export async function getRecentPosts(postsLimit: number, startAt?: string) {
