@@ -1,3 +1,5 @@
+import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 import { getAllPosts, getPostBySlug, getUserWithUsername } from "../../lib/firebase"
 
 export async function getStaticProps({ params }) {
@@ -33,10 +35,22 @@ export async function getStaticPaths() {
     }
 }
 
-export default function PostPage({}) {
+export default function PostPage(props) {
+    const { post } = props
+
     return (
         <main>
-            <h1>Post Page</h1>
+            <div className="card">
+                <h1>{post.title}</h1>
+                <span className="text-sm">
+                    Written by{' '}
+                    <Link href={`/${post.username}`}>
+                        @{post.username}
+                    </Link>{' '}
+                    on {post.createdAt}
+                </span>
+                <ReactMarkdown>{post.content}</ReactMarkdown>
+            </div>
         </main>
     )
 }
