@@ -1,6 +1,7 @@
 # Fireblog Tutorial
 This project is a simple full-stack Social Blogging Platform from the 
-[`Next.js Firebase Full Course`](https://fireship.io/courses/react-next-firebase/) by [Fireship.io](https://fireship.io/)
+[`Next.js Firebase Full Course`](https://fireship.io/courses/react-next-firebase/) by [Fireship.io](https://fireship.io/).  
+The goal of this project is to learn more about Next.js and Firebase.
 
 ## Local Development
 
